@@ -1,0 +1,197 @@
+app_name	package_name	category	subcategory	cate
+Slides	com.google.android.apps.docs.editors.slides	work		work
+Word	com.microsoft.office.word	work		work
+Office App	com.officedocument.word.docx.document.viewer	work		work
+Canva	com.canva.editor	work		work
+Sheets	com.google.android.apps.docs.editors.sheets	work		work
+Excel	com.microsoft.office.excel	work		work
+WPS Office	cn.wps.moffice_eng	work		work
+M365 Copilot	com.microsoft.office.officehubrow	work		work
+Adobe Acrobat	com.adobe.reader	work		work
+All PDF Reader	pdf.pdfreader.viewer.editor.free	work		work
+SuperVPN	com.jrzheng.supervpnfree	vpn		vpn
+Turbo VPN	free.vpn.unblock.proxy.turbovpn	vpn		vpn
+Secure VPN	com.fast.free.unblock.secure.vpn	vpn		vpn
+BIGO LIVE	sg.bigo.live	video		video
+VidMate	com.video.fun.app	video		video
+Snaptube	com.snaptube.premium	video		video
+VidMate	com.nemo.vidmate	video		video
+Video Downloader & Ace Player	videoplayer.videodownloader.downloader	video		video
+Netflix	com.netflix.mediaclient	video		video
+Bongo	com.bongo.bongobd	video		video
+Chorki	com.prothomalo	video		video
+hoichoi	com.viewlift.hoichoi	video		video
+HD STREAMZ	insure.cable.estate	video		video
+Binge	buzz.binge.mobile	video		video
+Bioscope	com.bongo.bioscope	video		video
+Sony LIV	com.sonyliv	video		video
+Prime Video	com.amazon.avod.thirdpartyclient	video		video
+MX Player	com.mxtech.videoplayer.ad	video		video
+PLAYit	com.playit.videoplayer	video		video
+Lark Player	com.dywx.larkplayer	video		video
+VLC	org.videolan.vlc	video		video
+YT Studio	com.google.android.apps.youtube.creator	video		video
+TikTok	com.zhiliaoapp.musically	video	short	videoshort
+Toffee	com.banglalink.toffee	video	short	videoshort
+TikTok Lite	com.zhiliaoapp.musically.go	video	short	videoshort
+KUKU TV	com.vlv.aravali.reels	video	short	videoshort
+Rail Sheba	com.shohoz.dtrainpwa	travel		travel
+Shohoz - Buy Bus Tickets	com.shohoz.bus.android	travel		travel
+Booking.com	com.booking	travel		travel
+GoZayaan	com.gozayaan.app	travel		travel
+US-Bangla Airlines	com.stsbd.fahim.usbangla	travel		travel
+Pathao	com.pathao.user	travel		travel
+Uber	com.ubercab	travel		travel
+Uber Driver	com.ubercab.driver	travel		travel
+Jatri	com.jatri.jatriuser	travel		travel
+inDrive	sinet.startup.inDriver	travel		travel
+Eyecon	com.eyecon.global	telcom		telcom
+Meet	com.google.android.apps.tachyon	telcom		telcom
+Zoom	us.zoom.videomeetings	telcom		telcom
+WhatsApp Business	com.whatsapp.w4b	telcom	commu	telcomcommu
+Teams	com.microsoft.teams	telcom		telcom
+WhatsApp	com.whatsapp	telcom	commu	telcomcommu
+imo	com.imo.android.imoim	telcom	commu	telcomcommu
+Telegram	org.telegram.messenger	telcom	commu	telcomcommu
+imo beta	com.imo.android.imoimbeta	telcom	commu	telcomcommu
+imo HD	com.imo.android.imoimhd	telcom	commu	telcomcommu
+Telegram	org.telegram.messenger.web	telcom	commu	telcomcommu
+Viber	com.viber.voip	telcom	commu	telcomcommu
+Botim	im.thebot.messenger	telcom	commu	telcomcommu
+imo Lite	com.imo.android.imoimlite	telcom	commu	telcomcommu
+Skype	com.skype.raider	telcom	commu	telcomcommu
+Outlook	com.microsoft.office.outlook	email		email
+Yahoo Mail	com.yahoo.mobile.client.android.mail	email		email
+Email	com.samsung.android.email.provider	email		email
+Rokomari	com.rokomari	shopping		shopping
+foodpanda	com.global.foodpanda.android	shopping		shopping
+Foodi	com.foodiBd	shopping		shopping
+Bikroy	com.bikroy	shopping		shopping
+Daraz	com.daraz.android	shopping		shopping
+Alibaba.com	com.alibaba.intl.android.apps.poseidon	shopping		shopping
+AliExpress	com.alibaba.aliexpresshd	shopping		shopping
+Amazon Shopping	com.amazon.mShop.android.shopping	shopping		shopping
+Galaxy Shop	com.samsung.android.galaxy	shopping		shopping
+ব্লুস্টোর	com.blueboxgp.store.bluestore	shopping		shopping
+Muslims Day	theoaktroop.appoframadan	region		region
+Quran	com.kutblog.arabicbanglaquran	region		region
+মুসলিম বাংলা	com.tos.namajtime	region		region
+নামাজের সময়সূচী - বাংলাদেশ	com.crossappers.prayerapp	region		region
+NID Wallet	bd.gov.nidw.nid.wallet	public		public
+Online GD	com.opus_bd.lostandfound	public		public
+DLRMS	com.softbdltd.eKhatian	public		public
+BRTA DL Checker	bd.gov.brta.dl_checker	public		public
+eJanata	com.jb.ejanata	public		public
+Mi Mover	com.miui.huanji	phonebackup		phonebackup
+Smart Switch	com.sec.android.easyMover	phonebackup		phonebackup
+Clone Phone	com.coloros.backuprestore	phonebackup		phonebackup
+Clone Phone	com.oneplus.backuprestore	phonebackup		phonebackup
+Rocket	com.dbbl.mbs.apps.main	payment	mobilbank	paymentmobilbank
+upay	bd.com.upay.customer	payment	mobilbank	paymentmobilbank
+NexusPay	com.dbbl.nexus.pay	payment	mobilbank	paymentmobilbank
+eRin	com.tslcglobal.cashebd	payment	mobilbank	paymentmobilbank
+TRUST MONEY	com.cibl.tbl	payment	mobilbank	paymentmobilbank
+Trust And Pay	com.tad.bdkepler	payment	mobilbank	paymentmobilbank
+Merchant App	com.bKash.merchantapp	payment	merchant	paymentmerchant
+Uddokta	com.konasl.nagad.agent	payment	merchant	paymentmerchant
+bKash Agent	com.bkash.businessapp	payment	merchant	paymentmerchant
+bKash	com.bKash.customerapp	payment	ewallet	paymentewallet
+Nagad	com.konasl.nagad	payment	ewallet	paymentewallet
+Sonali e-Wallet	bd.com.sonalibank.sw	payment	ewallet	paymentewallet
+MyGP	com.portonics.mygp	operator		operator
+My Robi	net.omobio.robisc	operator		operator
+MyBL	com.arena.banglalinkmela.app	operator		operator
+My Airtel	net.omobio.airtelsc	operator		operator
+MyTeletalk	teletalk.teletalkcustomerapp	operator		operator
+MyAKASH	com.redtech.myakash	operator		operator
+Cockpit Retail	retail.grameenphone.com.gpretail	operator		operator
+StarMaker	com.starmakerinteractive.starmaker	music		music
+YouTube Music	com.google.android.apps.youtube.music	music		music
+Spotify	com.spotify.music	music		music
+Google Play Music	com.google.android.music	music		music
+Music player	com.media.music.mp3.musicplayer	music		music
+Muso Player	com.muso.musicplayer	music		music
+Samsung Music	com.sec.android.app.music	music		music
+বিজ্ঞতা ঋণ	com.quickquick.getloan	loan		loan
+Urgent Money	com.smart.loan.money.smartloan	loan		loan
+Easy cash	com.eavert.ppwddcy.caqaqq.uididsh	loan		loan
+Lendora	com.taka.dora	loan		loan
+Patient Aid	com.itmedicus.patientaid	health		health
+Shukhee	com.shukhee.patientapp	health		health
+Samsung Health	com.sec.android.app.shealth	health		health
+DIMS	com.twgbd.dims	health		health
+Fit	com.google.android.apps.fitness	health		health
+O Relax	com.coloros.relax	health		health
+সুরক্ষা	com.codersbucket.surokkha_app	health		health
+Zen Space	com.oneplus.brickmode	health		health
+Fitbit	com.fitbit.FitbitMobile	health		health
+Google Play Games	com.google.android.play.games	game		game
+Gaming Hub	com.samsung.android.game.gamehome	game		game
+Candy Crush Saga	com.king.candycrushsaga	game		game
+Block Blast!	com.block.juggle	game		game
+Bubble Pop! - Shooter Puzzle	com.katanlabs.bubblepop	game		game
+skitto	com.skitto	game		game
+eFootball™	jp.konami.pesam	game		game
+DLS25	com.firsttouchgames.dls7	game		game
+World Cricket Championship 2	com.nextwave.wcc2	game		game
+8 Ball Pool	com.miniclip.eightballpool	game		game
+Free Fire	com.dts.freefireth	game		game
+PUBG MOBILE	com.tencent.ig	game		game
+Ludo King	com.ludo.king	game		game
+Carrom Disc Pool	com.miniclip.carrom	game		game
+Ludo Star	com.superking.ludo.star	game		game
+Subway Surf	com.kiloo.subwaysurf	game		game
+TempleRun2	com.imangi.templerun2	game		game
+Teen Patti Gold - 3Patti Rummy	com.teenpatti.hd.gold	game		game
+29 Card Game	com.BS_Pias.twentynine	game		game
+Clash of Clans	com.supercell.clashofclans	game		game
+Brac Agami	com.bracits.progoti	edu		edu
+Brac Ekota	com.bracits.agami_referrer	edu		edu
+Smart Tutor	com.rsupport.rs.activity.rsupport.aas2	edu		edu
+Brilliant	com.brilliant.connect.com.bd	edu		edu
+Duolingo	com.duolingo	edu		edu
+Bangla Dictionary	com.hdictionary.bn	edu		edu
+Contacts	com.google.android.contacts	contact		contact
+AmberIT	com.amberit.dialer	contact		contact
+Truecaller	com.truecaller	contact		contact
+LinkedIn	com.linkedin.android	commu		commu
+Xiaomi Community	com.mi.global.bbs	commu		commu
+Discord	com.discord	commu		commu
+Community	com.realmecomm.app	commu		commu
+Community	net.oneplus.forums	commu		commu
+Messenger	com.facebook.orca	commu		commu
+Facebook	com.facebook.katana	commu		commu
+Instagram	com.instagram.android	commu		commu
+Lite	com.facebook.lite	commu		commu
+Snapchat	com.snapchat.android	commu		commu
+Threads	com.instagram.barcelona	commu		commu
+X	com.twitter.android	commu		commu
+Instagram Lite	com.instagram.lite	commu		commu
+Alaap	com.alaap.app	commu		commu
+WeChat	com.tencent.mm	commu		commu
+Pinterest	com.pinterest	commu		commu
+Shomvob	com.shomvob.app	commu		commu
+Business Suite	com.facebook.pages.app	commu		commu
+Pi	com.blockchainvault	coin		coin
+Tonkeeper	com.ton_keeper	coin		coin
+Trust Wallet	com.wallet.crypto.trustapp	coin		coin
+Binance	com.binance.dev	coin		coin
+Bybit	com.bybit.app	coin		coin
+Bitget	com.bitget.exchange	coin		coin
+1xBet	org.xbet.client1	bet		bet
+MelBet	org.melbet.client	bet		bet
+Mostbet	com.ads.mostbet	bet		bet
+ExpertOption	com.expertoption	bet		bet
+BRAC Bank Astha	com.bracbank.astha	bank		bank
+CellFin	com.ibbl.cellfin	bank		bank
+Citytouch	com.thecitybank.citytouch	bank		bank
+BBL Shubidha	com.bracbank.shubidha	bank		bank
+PI Banking	com.pubali.internet.banking	bank		bank
+Ebl Skybanking	com.ebl.skybanking	bank		bank
+Unet	bd.com.ucb.unet	bank		bank
+IFIC Aamar Bank	com.ific.mobile	bank		bank
+SMART App	eraapps.bankasia.bdinternetbanking.apps	bank		bank
+IBBL iSmart	com.ionicframework.icellular894076	bank		bank
+Agrani Smart App	net.celloscope.ib_mobile_app	bank		bank
+MTB Neo	com.mtb.mobilebanking	bank		bank
+BR Explorer	com.suncrops.brexplorer	bank		bank
