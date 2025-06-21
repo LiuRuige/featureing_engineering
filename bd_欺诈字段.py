@@ -1,541 +1,400 @@
-# same_phone_diff_device_apply_cnt
 def fraud_variable(order_id):
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id
-          else null end) as same_phone_diff_device_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_phone=b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'        
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_phone_diff_device_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
-      
-
-     # same_phone_diff_cardid_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_card_id else null end) as same_phone_diff_cardid_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_phone=b.user_phone and a.user_card_id != b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id) 
-     same_phone_diff_cardid_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
-     
-
-
-     # same_phone_diff_account_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null then b.user_bank_account
-          else null end) as same_phone_diff_account_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_phone=b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id) 
-     same_phone_diff_account_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_device_diff_phone_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as same_device_diff_phone_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_device_id=b.user_device_id and a.user_phone != b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' 
-          and a.user_device_id is not null
-          and a.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e')
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_device_diff_phone_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_device_diff_cardid_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_card_id else null end) as same_device_diff_cardid_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_device_id=b.user_device_id and a.user_card_id != b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' 
-          and a.user_device_id is not null 
-          and a.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e')
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_device_diff_cardid_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_device_diff_account_apply_cnt
-     # same_device_diff_account_d7_apply_cnt
-     # same_device_diff_account_d14_apply_cnt
-     # same_device_diff_account_d30_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null then b.user_bank_account
-          else null end) as same_device_diff_account_apply_cnt,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account and date(a.borrow_time)-date(b.borrow_time)<=7 then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null and date(a.borrow_time)-date(b.borrow_time)<=7 then b.user_bank_account
-          else null end) as same_device_diff_account_d7_apply_cnt,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account and date(a.borrow_time)-date(b.borrow_time)<=14 then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null and date(a.borrow_time)-date(b.borrow_time)<=14 then b.user_bank_account
-          else null end) as same_device_diff_account_d14_apply_cnt,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account and date(a.borrow_time)-date(b.borrow_time)<=30 then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null and date(a.borrow_time)-date(b.borrow_time)<=30 then b.user_bank_account
-          else null end) as same_device_diff_account_d30_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_device_id=b.user_device_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' 
-          and a.user_device_id is not null 
-          and a.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e')
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_device_diff_account_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
-   
-
-     # same_cardid_diff_phone_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as same_cardid_diff_phone_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_card_id=b.user_card_id and a.user_phone != b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_cardid_diff_phone_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_cardid_diff_device_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id
-          else null end) as same_cardid_diff_device_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_card_id=b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_cardid_diff_device_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_cardid_diff_account_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null then b.user_bank_account
-          else null end) as same_cardid_diff_account_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_card_id=b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_cardid_diff_account_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_account_diff_phone_apply_cnt 特殊情况user_bank_account=''线上计算值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null and a.user_bank_account != '' then b.user_phone else null end) as same_account_diff_phone_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_bank_account=b.user_bank_account and a.user_phone != b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_bank_account is not null
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_account_diff_phone_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_account_diff_cardid_apply_cnt 特殊情况user_bank_account=''线上计算值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null and a.user_bank_account != '' then b.user_card_id else null end) as same_account_diff_cardid_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_bank_account=b.user_bank_account and a.user_card_id != b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_bank_account is not null
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_account_diff_cardid_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-     # same_account_diff_device_apply_cnt
-     # same_account_diff_device_d7_apply_cnt
-     # same_account_diff_device_d14_apply_cnt
-     # same_account_diff_device_d30_apply_cnt 特殊情况user_bank_account=''线上计算值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_bank_account != '' and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id
-          else null end) as same_account_diff_device_apply_cnt,
-          count(distinct case when b.order_id is not null and a.user_bank_account != '' and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') and date(a.borrow_time)-date(b.borrow_time)<=7 then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') and date(a.borrow_time)-date(b.borrow_time)<=7 then b.user_device_id
-          else null end) as same_account_diff_device_d7_apply_cnt,
-          count(distinct case when b.order_id is not null and a.user_bank_account != '' and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') and date(a.borrow_time)-date(b.borrow_time)<=14 then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') and date(a.borrow_time)-date(b.borrow_time)<=14 then b.user_device_id
-          else null end) as same_account_diff_device_d14_apply_cnt,
-          count(distinct case when b.order_id is not null and a.user_bank_account != '' and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') and date(a.borrow_time)-date(b.borrow_time)<=30 then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') and date(a.borrow_time)-date(b.borrow_time)<=30 then b.user_device_id
-          else null end) as same_account_diff_device_d30_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_bank_account=b.user_bank_account and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_bank_account is not null
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_account_diff_device_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_name_diff_phone_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as same_name_diff_phone_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_name=b.user_name and a.user_phone != b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_name_diff_phone_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_name_diff_cardid_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_card_id else null end) as same_name_diff_cardid_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_name=b.user_name and a.user_card_id != b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_name_diff_cardid_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
-   
-
-     # same_name_diff_device_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id
-          else null end) as same_name_diff_device_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_name=b.user_name and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_name_diff_device_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_name_diff_account_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null then b.user_bank_account
-          else null end) as same_name_diff_account_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_name=b.user_name and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_name_diff_account_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_relatone_diff_phone_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as same_relatone_diff_phone_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_one=b.user_relate_one and a.user_phone != b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relatone_diff_phone_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_relatone_diff_cardid_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_card_id else null end) as same_relatone_diff_cardid_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_one=b.user_relate_one and a.user_card_id != b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relatone_diff_cardid_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_relatone_diff_device_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id
-          else null end) as same_relatone_diff_device_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_one=b.user_relate_one and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relatone_diff_device_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
-  
-
-     # same_relatone_diff_account_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null then b.user_bank_account
-          else null end) as same_relatone_diff_account_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_one=b.user_relate_one and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relatone_diff_account_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_relattwo_diff_phone_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as same_relattwo_diff_phone_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_two=b.user_relate_two and a.user_phone != b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relattwo_diff_phone_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-     # same_relattwo_diff_cardid_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_card_id else null end) as same_relattwo_diff_cardid_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_two=b.user_relate_two and a.user_card_id != b.user_card_id and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relattwo_diff_cardid_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_relattwo_diff_device_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id 
-          when b.order_id is not null and a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id
-          else null end) as same_relattwo_diff_device_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_two=b.user_relate_two and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relattwo_diff_device_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # same_relattwo_diff_account_apply_cnt
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when b.order_id is not null and a.user_bank_account is not null and a.user_bank_account != b.user_bank_account then b.user_bank_account 
-          when b.order_id is not null and a.user_bank_account is null then b.user_bank_account
-          else null end) as same_relattwo_diff_account_apply_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_two=b.user_relate_two and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     same_relattwo_diff_account_apply_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # relatone_is_relattwo_phone_cnt 第一联系人关联不到第二联系人值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as relatone_is_relattwo_phone_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_relate_one=b.user_relate_two and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc'''
-     relatone_is_relattwo_phone_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # relatone_is_relatthree_phone_cnt 第一联系人关联不到第三联系人值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as relatone_is_relatthree_phone_cnt
-          from bengal_test.bd_dwd_order a left join (select c.*,d.phone_three as user_relate_three from bengal_test.bd_dwd_order c left join ctm_user d on c.order_id=d.order_id)b on a.user_relate_one=b.user_relate_three and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          group by 1
-          order by 1 desc'''
-     relatone_is_relatthree_phone_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # phonebk_is_relatone_phone_cnt 备用手机号关联不到第一联系人值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as phonebk_is_relatone_phone_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_phone_backup=b.user_relate_one and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_phone_backup is not null
-          and a.user_phone_backup != ''
-          group by 1
-          order by 1 desc'''
-     phonebk_is_relatone_phone_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
-  
-
-     # phonebk_is_relattwo_phone_cnt 备用手机号关联不到第二联系人值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as phonebk_is_relattwo_phone_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_phone_backup=b.user_relate_two and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_phone_backup is not null
-          and a.user_phone_backup != ''
-          group by 1
-          order by 1 desc'''
-     phonebk_is_relattwo_phone_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # phonebk_is_relatthree_phone_cnt 备用手机号关联不到第三联系人值为0
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.order_id is not null then b.user_phone else null end) as phonebk_is_relatthree_phone_cnt
-          from bengal_test.bd_dwd_order a left join (select c.*,d.phone_three as user_relate_three from bengal_test.bd_dwd_order c left join ctm_user d on c.order_id=d.order_id)b on a.user_phone_backup=b.user_relate_three and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_phone_backup is not null
-          and a.user_phone_backup != ''
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     phonebk_is_relatthree_phone_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # account_is_phone_cnt 取款账号关联不到手机号值为-1
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.user_phone != a.user_phone then b.user_phone else null end) as account_is_phone_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_bank_account=b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_bank_account is not null
-          and b.order_id is not null
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     account_is_phone_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
     
+    debts_order = data[data['order_id'].astype(str)== order_id] 
 
-     # account_is_phone_cardid_cnt 取款账号关联不到手机号值为-1
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          uniq(case when b.user_card_id != a.user_card_id then b.user_card_id else null end) as account_is_phone_cardid_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_bank_account=b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_bank_account is not null
-          and b.order_id is not null
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     account_is_phone_cardid_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
- 
-
-     # account_is_phone_device_cnt 取款账号关联不到手机号值为-1
-     conn = create_engine('postgresql://BASIC$root:WCjak3$RQnf3ST@8.210.75.205:13343/test')
-     sql = '''select a.order_id,
-          count(distinct case when a.user_device_id is not null and a.user_device_id != b.user_device_id and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id 
-          when a.user_device_id is null and b.user_device_id ~* '(\w|\d){{8}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{4}}-(\w|\d){{12}}' and b.user_device_id not in ('','00000000-0000-0000-0000-000000000000','f54bed004c6896417635db54baeac499','e4944f2e-1114-48d0-a93e-c943bad10221','bbd64611-c2cb-4726-87fa-9e3f8149a25e') then b.user_device_id
-          else null end) as account_is_phone_device_cnt
-          from bengal_test.bd_dwd_order a left join bengal_test.bd_dwd_order b on a.user_bank_account=b.user_phone and b.borrow_time<=a.borrow_time
-          where a.order_id = '{}'
-          and a.user_bank_account is not null
-          and b.order_id is not null
-          group by 1
-          order by 1 desc;'''.format(order_id)
-     account_is_phone_device_cnt = pd.read_sql_query(sql, conn)
-     conn.dispose()
-     fraud_df = pd.DataFrame({'order_id': [order_id]})  
-     fraud_df = fraud_df \
-     .merge(same_phone_diff_device_apply_cnt,how='left',on='order_id') \
-     .merge(same_phone_diff_cardid_apply_cnt,how='left',on='order_id') \
-     .merge(same_phone_diff_account_apply_cnt,how='left',on='order_id') \
-     .merge(same_device_diff_phone_apply_cnt,how='left',on='order_id') \
-     .merge(same_device_diff_cardid_apply_cnt,how='left',on='order_id') \
-     .merge(same_device_diff_account_apply_cnt,how='left',on='order_id') \
-     .merge(same_cardid_diff_phone_apply_cnt,how='left',on='order_id') \
-     .merge(same_cardid_diff_device_apply_cnt,how='left',on='order_id') \
-     .merge(same_cardid_diff_account_apply_cnt,how='left',on='order_id') \
-     .merge(same_account_diff_phone_apply_cnt,how='left',on='order_id') \
-     .merge(same_account_diff_cardid_apply_cnt,how='left',on='order_id') \
-     .merge(same_account_diff_device_apply_cnt,how='left',on='order_id') \
-     .merge(same_name_diff_phone_apply_cnt,how='left',on='order_id') \
-     .merge(same_name_diff_cardid_apply_cnt,how='left',on='order_id') \
-     .merge(same_name_diff_device_apply_cnt,how='left',on='order_id') \
-     .merge(same_name_diff_account_apply_cnt,how='left',on='order_id') \
-     .merge(same_relatone_diff_phone_apply_cnt,how='left',on='order_id') \
-     .merge(same_relatone_diff_cardid_apply_cnt,how='left',on='order_id') \
-     .merge(same_relatone_diff_device_apply_cnt,how='left',on='order_id') \
-     .merge(same_relatone_diff_account_apply_cnt,how='left',on='order_id') \
-     .merge(same_relattwo_diff_phone_apply_cnt,how='left',on='order_id') \
-     .merge(same_relattwo_diff_cardid_apply_cnt,how='left',on='order_id') \
-     .merge(same_relattwo_diff_device_apply_cnt,how='left',on='order_id') \
-     .merge(same_relattwo_diff_account_apply_cnt,how='left',on='order_id') \
-     .merge(relatone_is_relattwo_phone_cnt,how='left',on='order_id') \
-     .merge(relatone_is_relatthree_phone_cnt,how='left',on='order_id') \
-     .merge(phonebk_is_relatone_phone_cnt,how='left',on='order_id') \
-     .merge(phonebk_is_relattwo_phone_cnt,how='left',on='order_id') \
-     .merge(phonebk_is_relatthree_phone_cnt,how='left',on='order_id') \
-     .merge(account_is_phone_cnt,how='left',on='order_id') \
-     .merge(account_is_phone_cardid_cnt,how='left',on='order_id') \
-     .merge(account_is_phone_device_cnt,how='left',on='order_id') 
+    order_app_name = debts_order['app_name'].item()
+    order_borrow_time = debts_order['borrow_time'].dt.date.item()
+    order_user_phone = debts_order['user_phone'].item()
+    order_user_ip =  debts_order['user_ip'].item()
+    order_user_device_id = debts_order['user_device_id'].item()
+    order_user_card_id = debts_order['user_card_id'].item()
+    order_user_bank_account = debts_order['user_bank_account'].item() 
+  
+    debts  = data.loc[(data['user_phone'] == debts_order['user_phone'].item())&(data['borrow_time'].dt.date <= debts_order['borrow_time'].dt.date.item())]
+    app_name = debts.app_name 
+    loan_amount = debts.loan_amount 
+    user_phone = debts.user_phone
+    borrow_time = debts.borrow_time.dt.date
+    user_card_id = debts.user_card_id 
+    user_ip = debts.user_ip
+    user_device_id = debts.user_device_id
+    user_bank_account = debts.user_bank_account
+    user_type = debts.user_type
+    status =debts.status 
+    repay_yes_time = debts.repay_yes_time.dt.date
+    repay_time = debts.repay_time.dt.date
+    loan_completion_time = debts.loan_completion_time.dt.date
+    if debts.empty:
+        same_phone_diff_device_apply_cnt =same_phone_diff_device_d0_apply_cnt = same_phone_diff_device_d3_apply_cnt = same_phone_diff_device_d7_apply_cnt = same_phone_diff_device_d14_apply_cnt = same_phone_diff_device_d30_apply_cnt = -1
+        same_phone_diff_account_apply_cnt = same_phone_diff_account_d0_apply_cnt = same_phone_diff_account_d3_apply_cnt = same_phone_diff_account_d7_apply_cnt = same_phone_diff_account_d14_apply_cnt = same_phone_diff_account_d30_apply_cnt = -1
+        same_phone_diff_cardid_apply_cnt = same_phone_diff_cardid_d0_apply_cnt = same_phone_diff_cardid_d3_apply_cnt = same_phone_diff_cardid_d7_apply_cnt = same_phone_diff_cardid_d14_apply_cnt = same_phone_diff_cardid_d30_apply_cnt = -1
+        same_phone_diff_ip_apply_cnt = same_phone_diff_ip_d0_apply_cnt = same_phone_diff_ip_d3_apply_cnt = same_phone_diff_ip_d7_apply_cnt = same_phone_diff_ip_d14_apply_cnt = same_phone_diff_ip_d30_apply_cnt = -1 
+    else:
+        same_phone_diff_device_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & (borrow_time<= order_borrow_time)]['user_device_id'].nunique()
+        same_phone_diff_device_d0_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days == 0)]['user_device_id'].nunique()
+        same_phone_diff_device_d3_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') &((order_borrow_time - borrow_time).dt.days <= 3)]['user_device_id'].nunique()
+        same_phone_diff_device_d7_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') &((order_borrow_time - borrow_time).dt.days <= 7)]['user_device_id'].nunique()
+        same_phone_diff_device_d14_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') &((order_borrow_time - borrow_time).dt.days <= 14)]['user_device_id'].nunique()
+        same_phone_diff_device_d30_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') &((order_borrow_time - borrow_time).dt.days <= 30)]['user_device_id'].nunique()
 
 
+        same_phone_diff_account_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&(user_bank_account!='')]['user_bank_account'].nunique()
+        same_phone_diff_account_d0_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_bank_account !='')]['user_bank_account'].nunique()
+        same_phone_diff_account_d3_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_bank_account != '')]['user_bank_account'].nunique()
+        same_phone_diff_account_d7_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_bank_account != '')]['user_bank_account'].nunique()
+        same_phone_diff_account_d14_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_bank_account != '')]['user_bank_account'].nunique()
+        same_phone_diff_account_d30_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_bank_account !='')]['user_bank_account'].nunique()
+        
 
-     fraud_df['same_phone_diff_device_apply_cnt'] = fraud_df['same_phone_diff_device_apply_cnt'].fillna(-1)
-     fraud_df['same_phone_diff_cardid_apply_cnt'] = fraud_df['same_phone_diff_cardid_apply_cnt'].fillna(-1)
-     fraud_df['same_phone_diff_account_apply_cnt'] = fraud_df['same_phone_diff_account_apply_cnt'].fillna(-1)
+        same_phone_diff_cardid_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)]['user_card_id'].nunique()
+        same_phone_diff_cardid_d0_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_card_id !='')]['user_card_id'].nunique()
+        same_phone_diff_cardid_d3_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_card_id !='')]['user_card_id'].nunique()
+        same_phone_diff_cardid_d7_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_card_id !='')]['user_card_id'].nunique()
+        same_phone_diff_cardid_d14_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_card_id !='')]['user_card_id'].nunique()
+        same_phone_diff_cardid_d30_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_card_id !='')]['user_card_id'].nunique()
+        
+        same_phone_diff_ip_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)]['user_ip'].nunique()
+        same_phone_diff_ip_d0_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_ip !='')]['user_ip'].nunique()
+        same_phone_diff_ip_d3_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_ip !='')]['user_ip'].nunique()
+        same_phone_diff_ip_d7_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_ip !='')]['user_ip'].nunique()
+        same_phone_diff_ip_d14_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_ip !='')]['user_ip'].nunique()
+        same_phone_diff_ip_d30_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_ip !='')]['user_ip'].nunique()
 
-     fraud_df['same_device_diff_phone_apply_cnt'] = fraud_df['same_device_diff_phone_apply_cnt'].fillna(-1)
-     fraud_df['same_device_diff_cardid_apply_cnt'] = fraud_df['same_device_diff_cardid_apply_cnt'].fillna(-1)
-     fraud_df['same_device_diff_account_apply_cnt'] = fraud_df['same_device_diff_account_apply_cnt'].fillna(-1)
-     fraud_df['same_device_diff_account_d7_apply_cnt'] = fraud_df['same_device_diff_account_d7_apply_cnt'].fillna(-1)
-     fraud_df['same_device_diff_account_d14_apply_cnt'] = fraud_df['same_device_diff_account_d14_apply_cnt'].fillna(-1)
-     fraud_df['same_device_diff_account_d30_apply_cnt'] = fraud_df['same_device_diff_account_d30_apply_cnt'].fillna(-1)
+    # phone_first_disburse_gap=if_else(max(disburse_diff,na.rm = T)%>%is.infinite()|max(disburse_diff,na.rm = T)%>%is.na(),-1,max(disburse_diff,na.rm = T)),
+    # phone_onloan_cnt=uniqueN(app_name[loan_completion_time<=tar_borrow_time & status>=8 & is_repay==0]),
+    # phone_onloan_new_cnt=uniqueN(app_name[ loan_completion_time<=tar_borrow_time & status>=8 & is_repay==0 & user_type==0]),
+    
+    # phone_overdue_cnt=uniqueN(app_name[is_due==1 & is_repay==0]),
+    # phone_repay_cnt=uniqueN(app_name[is_due==1 & is_repay==1]),
+    # phone_repay_order_cnt=uniqueN(order_id[is_due==1 & is_repay==1])
+     
+    debts  = data.loc[(data['user_card_id'] == debts_order['user_card_id'].item())&(data['borrow_time'].dt.date <= debts_order['borrow_time'].dt.date.item())]
+    app_name = debts.app_name 
+    loan_amount = debts.loan_amount 
+    user_phone = debts.user_phone
+    borrow_time = debts.borrow_time.dt.date
+    user_card_id = debts.user_card_id 
+    user_ip = debts.user_ip
+    user_device_id = debts.user_device_id
+    user_type = debts.user_type
+    status =debts.status 
+    repay_yes_time = debts.repay_yes_time.dt.date
+    repay_time = debts.repay_time.dt.date
+    loan_completion_time = debts.loan_completion_time.dt.date
+    user_bank_account = debts.user_bank_account 
+    if debts.empty:
+    # cardid_nex_plat_d0_overdue_cnt = debts.loc[(app_name !=  order_app_name) & (loan_amount > 0)&((repay_yes_time > pd.to_datetime(order_borrow_time))|(debts['repay_yes_time'].isna()))&((order_borrow_time - repay_time).dt.days == 0)&(repay_time< order_borrow_time)&(user_card_id == order_user_card_id)]['app_name'].nunique()
+        same_cardid_diff_device_apply_cnt = same_cardid_diff_device_d0_apply_cnt = same_cardid_diff_device_d3_apply_cnt = same_cardid_diff_device_d7_apply_cnt = same_cardid_diff_device_d14_apply_cnt = same_cardid_diff_device_d30_apply_cnt = -1
+        same_cardid_diff_account_apply_cnt = same_cardid_diff_account_d0_apply_cnt = same_cardid_diff_account_d3_apply_cnt = same_cardid_diff_account_d7_apply_cnt = same_cardid_diff_account_d14_apply_cnt = same_cardid_diff_account_d30_apply_cnt = -1
+        same_cardid_diff_ip_apply_cnt = same_cardid_diff_ip_d0_apply_cnt = same_cardid_diff_ip_d3_apply_cnt = same_cardid_diff_ip_d7_apply_cnt = same_cardid_diff_ip_d14_apply_cnt = same_cardid_diff_ip_d30_apply_cnt = -1
+        same_cardid_diff_phone_apply_cnt = same_cardid_diff_phone_d0_apply_cnt = same_cardid_diff_phone_d3_apply_cnt = same_cardid_diff_phone_d7_apply_cnt = same_cardid_diff_phone_d14_apply_cnt = same_cardid_diff_phone_d30_apply_cnt = -1
+    else:
+        same_cardid_diff_device_apply_cnt= debts.loc[(user_device_id != order_user_device_id)&(user_device_id!='00000000-0000-0000-0000-000000000000')]['user_device_id'].nunique()
+        same_cardid_diff_device_d0_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days == 0)]['user_device_id'].nunique()
+        same_cardid_diff_device_d3_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 3)]['user_device_id'].nunique()
+        same_cardid_diff_device_d7_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 7)]['user_device_id'].nunique()
+        same_cardid_diff_device_d14_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 14)]['user_device_id'].nunique()
+        same_cardid_diff_device_d30_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 30)]['user_device_id'].nunique()
 
-     fraud_df['same_cardid_diff_phone_apply_cnt'] = fraud_df['same_cardid_diff_phone_apply_cnt'].fillna(-1)
-     fraud_df['same_cardid_diff_device_apply_cnt'] = fraud_df['same_cardid_diff_device_apply_cnt'].fillna(-1)
-     fraud_df['same_cardid_diff_account_apply_cnt'] = fraud_df['same_cardid_diff_account_apply_cnt'].fillna(-1)
+        same_cardid_diff_account_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_cardid_diff_account_d0_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_cardid_diff_account_d3_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_cardid_diff_account_d7_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_cardid_diff_account_d14_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_cardid_diff_account_d30_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(order_user_bank_account !='')]['user_bank_account'].nunique()
 
-     fraud_df['same_account_diff_phone_apply_cnt'] = fraud_df['same_account_diff_phone_apply_cnt'].fillna(-1)
-     fraud_df['same_account_diff_cardid_apply_cnt'] = fraud_df['same_account_diff_cardid_apply_cnt'].fillna(-1)
-     fraud_df['same_account_diff_device_apply_cnt'] = fraud_df['same_account_diff_device_apply_cnt'].fillna(-1)
-     fraud_df['same_account_diff_device_d7_apply_cnt'] = fraud_df['same_account_diff_device_d7_apply_cnt'].fillna(-1)
-     fraud_df['same_account_diff_device_d14_apply_cnt'] = fraud_df['same_account_diff_device_d14_apply_cnt'].fillna(-1)
-     fraud_df['same_account_diff_device_d30_apply_cnt'] = fraud_df['same_account_diff_device_d30_apply_cnt'].fillna(-1)
+        same_cardid_diff_ip_apply_cnt=debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)]['user_ip'].nunique()
+        same_cardid_diff_ip_d0_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_ip !='')]['user_ip'].nunique()
+        same_cardid_diff_ip_d3_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_ip !='')]['user_ip'].nunique()
+        same_cardid_diff_ip_d7_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_ip !='')]['user_ip'].nunique()
+        same_cardid_diff_ip_d14_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_ip !='')]['user_ip'].nunique()
+        same_cardid_diff_ip_d30_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_ip !='')]['user_ip'].nunique()
+        
+        same_cardid_diff_phone_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)]['user_phone'].nunique()
+        same_cardid_diff_phone_d0_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_phone !='')]['user_phone'].nunique()
+        same_cardid_diff_phone_d3_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_phone !='')]['user_phone'].nunique()
+        same_cardid_diff_phone_d7_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_phone !='')]['user_phone'].nunique()    
+        same_cardid_diff_phone_d14_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_phone !='')]['user_phone'].nunique()
+        same_cardid_diff_phone_d30_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_phone !='')]['user_phone'].nunique()
 
-     fraud_df['same_name_diff_phone_apply_cnt'] = fraud_df['same_name_diff_phone_apply_cnt'].fillna(-1)
-     fraud_df['same_name_diff_cardid_apply_cnt'] = fraud_df['same_name_diff_cardid_apply_cnt'].fillna(-1)
-     fraud_df['same_name_diff_device_apply_cnt'] = fraud_df['same_name_diff_device_apply_cnt'].fillna(-1)
-     fraud_df['same_name_diff_account_apply_cnt'] = fraud_df['same_name_diff_account_apply_cnt'].fillna(-1)
+    # cardid_first_disburse_gap=if_else(max(disburse_diff,na.rm = T)%>%is.infinite()|max(disburse_diff,na.rm = T)%>%is.na(),-1,max(disburse_diff,na.rm = T)),
+    # cardid_onloan_cnt=uniqueN(app_name[loan_completion_time<=tar_borrow_time & status>=8 & is_repay==0]),
+    # cardid_onloan_new_cnt=uniqueN(app_name[ loan_completion_time<=tar_borrow_time & status>=8 & is_repay==0 & user_type==0]),
+    
+    
+    debts  = data.loc[(data['user_ip'] == debts_order['user_ip'].item())&(data['borrow_time'].dt.date <= debts_order['borrow_time'].dt.date.item())]
+    app_name = debts.app_name 
+    loan_amount = debts.loan_amount 
+    user_phone = debts.user_phone
+    borrow_time = debts.borrow_time.dt.date
+    user_card_id = debts.user_card_id 
+    user_ip = debts.user_ip
+    user_device_id = debts.user_device_id
+    user_type = debts.user_type
+    status =debts.status 
+    repay_yes_time = debts.repay_yes_time.dt.date
+    repay_time = debts.repay_time.dt.date
+    loan_completion_time = debts.loan_completion_time.dt.date
+    user_bank_account = debts.user_bank_account 
+    if debts.empty:
+        same_ip_diff_account_apply_cnt = same_ip_diff_account_d0_apply_cnt = same_ip_diff_account_d3_apply_cnt = same_ip_diff_account_d7_apply_cnt = same_ip_diff_account_d14_apply_cnt = same_ip_diff_account_d30_apply_cnt = -1
+        same_ip_diff_device_apply_cnt = same_ip_diff_device_d0_apply_cnt = same_ip_diff_device_d3_apply_cnt = same_ip_diff_device_d7_apply_cnt = same_ip_diff_device_d14_apply_cnt = same_ip_diff_device_d30_apply_cnt = -1
+        same_ip_diff_cardid_apply_cnt = same_ip_diff_cardid_d0_apply_cnt = same_ip_diff_cardid_d3_apply_cnt = same_ip_diff_cardid_d7_apply_cnt = same_ip_diff_cardid_d14_apply_cnt = same_ip_diff_cardid_d30_apply_cnt = -1
+        same_ip_diff_phone_apply_cnt = same_ip_diff_phone_d0_apply_cnt = same_ip_diff_phone_d3_apply_cnt = same_ip_diff_phone_d7_apply_cnt = same_ip_diff_phone_d14_apply_cnt = same_ip_diff_phone_d30_apply_cnt = -1
+    else:
+        same_ip_diff_device_apply_cnt= debts.loc[(user_device_id != order_user_device_id)&(user_device_id!='00000000-0000-0000-0000-000000000000')]['user_device_id'].nunique()
+        same_ip_diff_device_d0_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days == 0)]['user_device_id'].nunique()
+        same_ip_diff_device_d3_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 3)]['user_device_id'].nunique()
+        same_ip_diff_device_d7_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 7)]['user_device_id'].nunique()
+        same_ip_diff_device_d14_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 14)]['user_device_id'].nunique()
+        same_ip_diff_device_d30_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 30)]['user_device_id'].nunique()
 
-     fraud_df['same_relatone_diff_phone_apply_cnt'] = fraud_df['same_relatone_diff_phone_apply_cnt'].fillna(-1)
-     fraud_df['same_relatone_diff_cardid_apply_cnt'] = fraud_df['same_relatone_diff_cardid_apply_cnt'].fillna(-1)
-     fraud_df['same_relatone_diff_device_apply_cnt'] = fraud_df['same_relatone_diff_device_apply_cnt'].fillna(-1)
-     fraud_df['same_relatone_diff_account_apply_cnt'] = fraud_df['same_relatone_diff_account_apply_cnt'].fillna(-1)
+        same_ip_diff_account_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_ip_diff_account_d0_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_ip_diff_account_d3_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_ip_diff_account_d7_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_ip_diff_account_d14_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_ip_diff_account_d30_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        
+        same_ip_diff_cardid_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)]['user_card_id'].nunique()
+        same_ip_diff_cardid_d0_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_card_id !='')]['user_card_id'].nunique()
+        same_ip_diff_cardid_d3_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_card_id !='')]['user_card_id'].nunique()
+        same_ip_diff_cardid_d7_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_card_id !='')]['user_card_id'].nunique() 
+        same_ip_diff_cardid_d14_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_card_id !='')]['user_card_id'].nunique()
+        same_ip_diff_cardid_d30_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_card_id !='')]['user_card_id'].nunique()
+        
+        same_ip_diff_phone_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)]['user_phone'].nunique()
+        same_ip_diff_phone_d0_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_phone !='')]['user_phone'].nunique()  
+        same_ip_diff_phone_d3_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_phone !='')]['user_phone'].nunique()
+        same_ip_diff_phone_d7_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_phone !='')]['user_phone'].nunique()
+        same_ip_diff_phone_d14_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_phone !='')]['user_phone'].nunique()
+        same_ip_diff_phone_d30_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_phone !='')]['user_phone'].nunique()
 
-     fraud_df['same_relattwo_diff_phone_apply_cnt'] = fraud_df['same_relattwo_diff_phone_apply_cnt'].fillna(-1)
-     fraud_df['same_relattwo_diff_cardid_apply_cnt'] = fraud_df['same_relattwo_diff_cardid_apply_cnt'].fillna(-1)
-     fraud_df['same_relattwo_diff_device_apply_cnt'] = fraud_df['same_relattwo_diff_device_apply_cnt'].fillna(-1)
-     fraud_df['same_relattwo_diff_account_apply_cnt'] = fraud_df['same_relattwo_diff_account_apply_cnt'].fillna(-1)
 
-     fraud_df['relatone_is_relattwo_phone_cnt'] = fraud_df['relatone_is_relattwo_phone_cnt'].fillna(-1)
-     fraud_df['relatone_is_relatthree_phone_cnt'] = fraud_df['relatone_is_relatthree_phone_cnt'].fillna(-1)
+    debts  = data.loc[(data['user_device_id'] == debts_order['user_device_id'].item())&(data['borrow_time'].dt.date <= debts_order['borrow_time'].dt.date.item())]
+    app_name = debts.app_name 
+    loan_amount = debts.loan_amount 
+    user_phone = debts.user_phone
+    borrow_time = debts.borrow_time.dt.date
+    user_card_id = debts.user_card_id 
+    user_ip = debts.user_ip
+    user_device_id = debts.user_device_id
+    user_type = debts.user_type
+    status =debts.status 
+    repay_yes_time = debts.repay_yes_time.dt.date
+    repay_time = debts.repay_time.dt.date
+    loan_completion_time = debts.loan_completion_time.dt.date
+    user_bank_account = debts.user_bank_account
 
-     fraud_df['phonebk_is_relatone_phone_cnt'] = fraud_df['phonebk_is_relatone_phone_cnt'].fillna(-1)
-     fraud_df['phonebk_is_relattwo_phone_cnt'] = fraud_df['phonebk_is_relattwo_phone_cnt'].fillna(-1)
-     fraud_df['phonebk_is_relatthree_phone_cnt'] = fraud_df['phonebk_is_relatthree_phone_cnt'].fillna(-1)
+    if debts.empty:
+        same_device_diff_account_apply_cnt = same_device_diff_account_d0_apply_cnt = same_device_diff_account_d3_apply_cnt = same_device_diff_account_d7_apply_cnt = same_device_diff_account_d14_apply_cnt = same_device_diff_account_d30_apply_cnt = -1
+        same_device_diff_cardid_apply_cnt = same_device_diff_cardid_d0_apply_cnt = same_device_diff_cardid_d3_apply_cnt = same_device_diff_cardid_d7_apply_cnt = same_device_diff_cardid_d14_apply_cnt = same_device_diff_cardid_d30_apply_cnt = -1
+        same_device_diff_phone_apply_cnt = same_device_diff_phone_d0_apply_cnt = same_device_diff_phone_d3_apply_cnt = same_device_diff_phone_d7_apply_cnt = same_device_diff_phone_d14_apply_cnt = same_device_diff_phone_d30_apply_cnt = -1
+        same_device_diff_ip_apply_cnt = same_device_diff_ip_d0_apply_cnt = same_device_diff_ip_d3_apply_cnt = same_device_diff_ip_d7_apply_cnt = same_device_diff_ip_d14_apply_cnt = same_device_diff_ip_d30_apply_cnt = -1
+    else:
+        same_device_diff_account_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_device_diff_account_d0_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_device_diff_account_d3_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_device_diff_account_d7_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_device_diff_account_d14_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        same_device_diff_account_d30_apply_cnt= debts.loc[(user_bank_account  != order_user_bank_account)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(order_user_bank_account !='')]['user_bank_account'].nunique()
+        
+        same_device_diff_cardid_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)]['user_card_id'].nunique()
+        same_device_diff_cardid_d0_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_card_id !='')]['user_card_id'].nunique()
+        same_device_diff_cardid_d3_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_card_id !='')]['user_card_id'].nunique()
+        same_device_diff_cardid_d7_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_card_id !='')]['user_card_id'].nunique() 
+        same_device_diff_cardid_d14_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_card_id !='')]['user_card_id'].nunique()
+        same_device_diff_cardid_d30_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_card_id !='')]['user_card_id'].nunique()
+        
+        same_device_diff_phone_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)]['user_phone'].nunique()
+        same_device_diff_phone_d0_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_phone !='')]['user_phone'].nunique()  
+        same_device_diff_phone_d3_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_phone !='')]['user_phone'].nunique()
+        same_device_diff_phone_d7_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_phone !='')]['user_phone'].nunique()
+        same_device_diff_phone_d14_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_phone !='')]['user_phone'].nunique()
+        same_device_diff_phone_d30_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_phone !='')]['user_phone'].nunique()
+        
+        same_device_diff_ip_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)]['user_ip'].nunique()
+        same_device_diff_ip_d0_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_ip !='')]['user_ip'].nunique()
+        same_device_diff_ip_d3_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_ip !='')]['user_ip'].nunique()
+        same_device_diff_ip_d7_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_ip !='')]['user_ip'].nunique()
+        same_device_diff_ip_d14_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_ip !='')]['user_ip'].nunique()
+        same_device_diff_ip_d30_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_ip !='')]['user_ip'].nunique()
 
-     fraud_df['account_is_phone_cnt'] = fraud_df['account_is_phone_cnt'].fillna(-1)
-     fraud_df['account_is_phone_cardid_cnt'] = fraud_df['account_is_phone_cardid_cnt'].fillna(-1)
-     fraud_df['account_is_phone_device_cnt'] = fraud_df['account_is_phone_device_cnt'].fillna(-1)
-     return fraud_df
+    debts  = data.loc[(data['user_bank_account'] == debts_order['user_bank_account'].item())&(data['borrow_time'].dt.date <= debts_order['borrow_time'].dt.date.item())]
+    app_name = debts.app_name 
+    loan_amount = debts.loan_amount 
+    user_phone = debts.user_phone
+    borrow_time = debts.borrow_time.dt.date
+    user_card_id = debts.user_card_id 
+    user_ip = debts.user_ip
+    user_device_id = debts.user_device_id
+    user_type = debts.user_type
+    status =debts.status 
+    repay_yes_time = debts.repay_yes_time.dt.date
+    repay_time = debts.repay_time.dt.date
+    loan_completion_time = debts.loan_completion_time.dt.date
+    user_bank_account = debts.user_bank_account
+    if debts.empty:
+        same_acount_diff_device_apply_cnt = same_acount_diff_device_d0_apply_cnt = same_acount_diff_device_d3_apply_cnt = same_acount_diff_device_d7_apply_cnt = same_acount_diff_device_d14_apply_cnt = same_acount_diff_device_d30_apply_cnt = -1
+        same_acount_diff_cardid_apply_cnt = same_acount_diff_cardid_d0_apply_cnt = same_acount_diff_cardid_d3_apply_cnt = same_acount_diff_cardid_d7_apply_cnt = same_acount_diff_cardid_d14_apply_cnt = same_acount_diff_cardid_d30_apply_cnt = -1
+        same_acount_diff_phone_apply_cnt = same_acount_diff_phone_d0_apply_cnt = same_acount_diff_phone_d3_apply_cnt = same_acount_diff_phone_d7_apply_cnt = same_acount_diff_phone_d14_apply_cnt = same_acount_diff_phone_d30_apply_cnt = -1
+        same_acount_diff_ip_apply_cnt = same_acount_diff_ip_d0_apply_cnt = same_acount_diff_ip_d3_apply_cnt = same_acount_diff_ip_d7_apply_cnt = same_acount_diff_ip_d14_apply_cnt = same_acount_diff_ip_d30_apply_cnt = -1
+    else:
+        same_acount_diff_cardid_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)]['user_card_id'].nunique()
+        same_acount_diff_cardid_d0_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_card_id !='')]['user_card_id'].nunique()
+        same_acount_diff_cardid_d3_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_card_id !='')]['user_card_id'].nunique()
+        same_acount_diff_cardid_d7_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_card_id !='')]['user_card_id'].nunique() 
+        same_acount_diff_cardid_d14_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_card_id !='')]['user_card_id'].nunique()
+        same_acount_diff_cardid_d30_apply_cnt= debts.loc[(user_card_id != order_user_card_id)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_card_id !='')]['user_card_id'].nunique()
+        
+        same_acount_diff_phone_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)]['user_phone'].nunique()
+        same_acount_diff_phone_d0_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_phone !='')]['user_phone'].nunique()  
+        same_acount_diff_phone_d3_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_phone !='')]['user_phone'].nunique()
+        same_acount_diff_phone_d7_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_phone !='')]['user_phone'].nunique()
+        same_acount_diff_phone_d14_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_phone !='')]['user_phone'].nunique()
+        same_acount_diff_phone_d30_apply_cnt= debts.loc[(user_phone != order_user_phone)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_phone !='')]['user_phone'].nunique()
+        
+        same_acount_diff_ip_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)]['user_ip'].nunique()
+        same_acount_diff_ip_d0_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days == 0)&(user_ip !='')]['user_ip'].nunique()
+        same_acount_diff_ip_d3_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 3)&(user_ip !='')]['user_ip'].nunique()
+        same_acount_diff_ip_d7_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 7)&(user_ip !='')]['user_ip'].nunique()
+        same_acount_diff_ip_d14_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 14)&(user_ip !='')]['user_ip'].nunique()
+        same_acount_diff_ip_d30_apply_cnt= debts.loc[(user_ip != order_user_ip)&(borrow_time <= order_borrow_time)&((order_borrow_time - borrow_time).dt.days <= 30)&(user_ip !='')]['user_ip'].nunique()
+        
+        same_acount_diff_device_apply_cnt= debts.loc[(user_device_id != order_user_device_id)&(user_device_id!='00000000-0000-0000-0000-000000000000')]['user_device_id'].nunique()
+        same_acount_diff_device_d0_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days == 0)]['user_device_id'].nunique()
+        same_acount_diff_device_d3_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 3)]['user_device_id'].nunique()    
+        same_acount_diff_device_d7_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 7)]['user_device_id'].nunique()
+        same_acount_diff_device_d14_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 14)]['user_device_id'].nunique()
+        same_acount_diff_device_d30_apply_cnt= debts.loc[(user_device_id  != order_user_device_id)&len(user_device_id)==36 & (user_device_id!='00000000-0000-0000-0000-000000000000') & ((order_borrow_time - borrow_time).dt.days <= 30)]['user_device_id'].nunique() 
+
+
+     
+    df= {'order_id': order_id, 
+                  'same_phone_diff_device_apply_cnt':same_phone_diff_device_apply_cnt,
+                    'same_phone_diff_device_d0_apply_cnt':same_phone_diff_device_d0_apply_cnt,
+                    'same_phone_diff_device_d3_apply_cnt':same_phone_diff_device_d3_apply_cnt,
+                    'same_phone_diff_device_d7_apply_cnt':same_phone_diff_device_d7_apply_cnt,
+                    'same_phone_diff_device_d14_apply_cnt':same_phone_diff_device_d14_apply_cnt,
+                    'same_phone_diff_device_d30_apply_cnt':same_phone_diff_device_d30_apply_cnt,
+                    'same_phone_diff_account_apply_cnt':same_phone_diff_account_apply_cnt,
+                    'same_phone_diff_account_d0_apply_cnt':same_phone_diff_account_d0_apply_cnt,
+                    'same_phone_diff_account_d3_apply_cnt':same_phone_diff_account_d3_apply_cnt,
+                    'same_phone_diff_account_d7_apply_cnt':same_phone_diff_account_d7_apply_cnt,
+                    'same_phone_diff_account_d14_apply_cnt':same_phone_diff_account_d14_apply_cnt,
+                    'same_phone_diff_account_d30_apply_cnt':same_phone_diff_account_d30_apply_cnt,
+                    'same_phone_diff_cardid_apply_cnt':same_phone_diff_cardid_apply_cnt,
+                    'same_phone_diff_cardid_d0_apply_cnt':same_phone_diff_cardid_d0_apply_cnt,
+                    'same_phone_diff_cardid_d3_apply_cnt':same_phone_diff_cardid_d3_apply_cnt,
+                    'same_phone_diff_cardid_d7_apply_cnt':same_phone_diff_cardid_d7_apply_cnt,  
+                    'same_phone_diff_cardid_d14_apply_cnt':same_phone_diff_cardid_d14_apply_cnt,
+                    'same_phone_diff_cardid_d30_apply_cnt':same_phone_diff_cardid_d30_apply_cnt,
+                    'same_phone_diff_ip_apply_cnt':same_phone_diff_ip_apply_cnt,
+                    'same_phone_diff_ip_d0_apply_cnt':same_phone_diff_ip_d0_apply_cnt,
+                    'same_phone_diff_ip_d3_apply_cnt':same_phone_diff_ip_d3_apply_cnt,
+                    'same_phone_diff_ip_d7_apply_cnt':same_phone_diff_ip_d7_apply_cnt,
+                    'same_phone_diff_ip_d14_apply_cnt':same_phone_diff_ip_d14_apply_cnt,
+                    'same_phone_diff_ip_d30_apply_cnt':same_phone_diff_ip_d30_apply_cnt,
+                   
+                    'same_cardid_diff_device_apply_cnt':same_cardid_diff_device_apply_cnt,
+                    'same_cardid_diff_device_d0_apply_cnt':same_cardid_diff_device_d0_apply_cnt,
+                    'same_cardid_diff_device_d3_apply_cnt':same_cardid_diff_device_d3_apply_cnt,
+                    'same_cardid_diff_device_d7_apply_cnt':same_cardid_diff_device_d7_apply_cnt,
+                    'same_cardid_diff_device_d14_apply_cnt':same_cardid_diff_device_d14_apply_cnt,
+                    'same_cardid_diff_device_d30_apply_cnt':same_cardid_diff_device_d30_apply_cnt,
+                    'same_cardid_diff_account_apply_cnt':same_cardid_diff_account_apply_cnt,
+                    'same_cardid_diff_account_d0_apply_cnt':same_cardid_diff_account_d0_apply_cnt,
+                    'same_cardid_diff_account_d3_apply_cnt':same_cardid_diff_account_d3_apply_cnt,
+                    'same_cardid_diff_account_d7_apply_cnt':same_cardid_diff_account_d7_apply_cnt,
+                    'same_cardid_diff_account_d14_apply_cnt':same_cardid_diff_account_d14_apply_cnt,
+                    'same_cardid_diff_account_d30_apply_cnt':same_cardid_diff_account_d30_apply_cnt,
+                    'same_cardid_diff_ip_apply_cnt':same_cardid_diff_ip_apply_cnt,
+                    'same_cardid_diff_ip_d0_apply_cnt':same_cardid_diff_ip_d0_apply_cnt,    
+                    'same_cardid_diff_ip_d3_apply_cnt':same_cardid_diff_ip_d3_apply_cnt,
+                    'same_cardid_diff_ip_d7_apply_cnt':same_cardid_diff_ip_d7_apply_cnt,
+                    'same_cardid_diff_ip_d14_apply_cnt':same_cardid_diff_ip_d14_apply_cnt,
+                    'same_cardid_diff_ip_d30_apply_cnt':same_cardid_diff_ip_d30_apply_cnt,
+                    'same_cardid_diff_phone_apply_cnt':same_cardid_diff_phone_apply_cnt,
+                    'same_cardid_diff_phone_d0_apply_cnt':same_cardid_diff_phone_d0_apply_cnt,
+                    'same_cardid_diff_phone_d3_apply_cnt':same_cardid_diff_phone_d3_apply_cnt,
+                    'same_cardid_diff_phone_d7_apply_cnt':same_cardid_diff_phone_d7_apply_cnt,
+                    'same_cardid_diff_phone_d14_apply_cnt':same_cardid_diff_phone_d14_apply_cnt,
+                    'same_cardid_diff_phone_d30_apply_cnt':same_cardid_diff_phone_d30_apply_cnt,
+                    'same_ip_diff_device_apply_cnt':same_ip_diff_device_apply_cnt,
+                    'same_ip_diff_device_d0_apply_cnt':same_ip_diff_device_d0_apply_cnt,
+                    'same_ip_diff_device_d3_apply_cnt':same_ip_diff_device_d3_apply_cnt,
+                    'same_ip_diff_device_d7_apply_cnt':same_ip_diff_device_d7_apply_cnt,
+                    'same_ip_diff_device_d14_apply_cnt':same_ip_diff_device_d14_apply_cnt,
+                    'same_ip_diff_device_d30_apply_cnt':same_ip_diff_device_d30_apply_cnt,
+                    'same_ip_diff_account_apply_cnt':same_ip_diff_account_apply_cnt,
+                    'same_ip_diff_account_d0_apply_cnt':same_ip_diff_account_d0_apply_cnt,
+                    'same_ip_diff_account_d3_apply_cnt':same_ip_diff_account_d3_apply_cnt,
+                    'same_ip_diff_account_d7_apply_cnt':same_ip_diff_account_d7_apply_cnt,
+                    'same_ip_diff_account_d14_apply_cnt':same_ip_diff_account_d14_apply_cnt,
+                    'same_ip_diff_account_d30_apply_cnt':same_ip_diff_account_d30_apply_cnt,
+                    'same_ip_diff_cardid_apply_cnt':same_ip_diff_cardid_apply_cnt,
+                    'same_ip_diff_cardid_d0_apply_cnt':same_ip_diff_cardid_d0_apply_cnt,
+                    'same_ip_diff_cardid_d3_apply_cnt':same_ip_diff_cardid_d3_apply_cnt,
+                    'same_ip_diff_cardid_d7_apply_cnt':same_ip_diff_cardid_d7_apply_cnt,
+                    'same_ip_diff_cardid_d14_apply_cnt':same_ip_diff_cardid_d14_apply_cnt,
+                    'same_ip_diff_cardid_d30_apply_cnt':same_ip_diff_cardid_d30_apply_cnt,
+                    'same_ip_diff_phone_apply_cnt':same_ip_diff_phone_apply_cnt,    
+                    'same_ip_diff_phone_d0_apply_cnt':same_ip_diff_phone_d0_apply_cnt,
+                    'same_ip_diff_phone_d3_apply_cnt':same_ip_diff_phone_d3_apply_cnt,
+                    'same_ip_diff_phone_d7_apply_cnt':same_ip_diff_phone_d7_apply_cnt,
+                    'same_ip_diff_phone_d14_apply_cnt':same_ip_diff_phone_d14_apply_cnt,
+                    'same_ip_diff_phone_d30_apply_cnt':same_ip_diff_phone_d30_apply_cnt,
+                    'same_device_diff_account_apply_cnt':same_device_diff_account_apply_cnt,
+                    'same_device_diff_account_d0_apply_cnt':same_device_diff_account_d0_apply_cnt,
+                    'same_device_diff_account_d3_apply_cnt':same_device_diff_account_d3_apply_cnt,
+                    'same_device_diff_account_d7_apply_cnt':same_device_diff_account_d7_apply_cnt,
+                    'same_device_diff_account_d14_apply_cnt':same_device_diff_account_d14_apply_cnt,
+                    'same_device_diff_account_d30_apply_cnt':same_device_diff_account_d30_apply_cnt,
+                    'same_device_diff_cardid_apply_cnt':same_device_diff_cardid_apply_cnt,
+                    'same_device_diff_cardid_d0_apply_cnt':same_device_diff_cardid_d0_apply_cnt,
+                    'same_device_diff_cardid_d3_apply_cnt':same_device_diff_cardid_d3_apply_cnt,    
+                    'same_device_diff_cardid_d7_apply_cnt':same_device_diff_cardid_d7_apply_cnt,
+                    'same_device_diff_cardid_d14_apply_cnt':same_device_diff_cardid_d14_apply_cnt,
+                    'same_device_diff_cardid_d30_apply_cnt':same_device_diff_cardid_d30_apply_cnt,
+                    'same_device_diff_phone_apply_cnt':same_device_diff_phone_apply_cnt,
+                    'same_device_diff_phone_d0_apply_cnt':same_device_diff_phone_d0_apply_cnt,
+                    'same_device_diff_phone_d3_apply_cnt':same_device_diff_phone_d3_apply_cnt,
+                    'same_device_diff_phone_d7_apply_cnt':same_device_diff_phone_d7_apply_cnt,
+                    'same_device_diff_phone_d14_apply_cnt':same_device_diff_phone_d14_apply_cnt,
+                    'same_device_diff_phone_d30_apply_cnt':same_device_diff_phone_d30_apply_cnt,
+                    'same_device_diff_ip_apply_cnt':same_device_diff_ip_apply_cnt,
+                    'same_device_diff_ip_d0_apply_cnt':same_device_diff_ip_d0_apply_cnt,    
+                    'same_device_diff_ip_d3_apply_cnt':same_device_diff_ip_d3_apply_cnt,
+                    'same_device_diff_ip_d7_apply_cnt':same_device_diff_ip_d7_apply_cnt,
+                    'same_device_diff_ip_d14_apply_cnt':same_device_diff_ip_d14_apply_cnt,
+                    'same_device_diff_ip_d30_apply_cnt':same_device_diff_ip_d30_apply_cnt,
+                    'same_acount_diff_cardid_apply_cnt':same_acount_diff_cardid_apply_cnt,
+                    'same_acount_diff_cardid_d0_apply_cnt':same_acount_diff_cardid_d0_apply_cnt,
+                    'same_acount_diff_cardid_d3_apply_cnt':same_acount_diff_cardid_d3_apply_cnt,
+                    'same_acount_diff_cardid_d7_apply_cnt':same_acount_diff_cardid_d7_apply_cnt,
+                    'same_acount_diff_cardid_d14_apply_cnt':same_acount_diff_cardid_d14_apply_cnt,
+                    'same_acount_diff_cardid_d30_apply_cnt':same_acount_diff_cardid_d30_apply_cnt,
+                    'same_acount_diff_phone_apply_cnt':same_acount_diff_phone_apply_cnt,
+                    'same_acount_diff_phone_d0_apply_cnt':same_acount_diff_phone_d0_apply_cnt,
+                    'same_acount_diff_phone_d3_apply_cnt':same_acount_diff_phone_d3_apply_cnt,
+                    'same_acount_diff_phone_d7_apply_cnt':same_acount_diff_phone_d7_apply_cnt,
+                    'same_acount_diff_phone_d14_apply_cnt':same_acount_diff_phone_d14_apply_cnt,
+                    'same_acount_diff_phone_d30_apply_cnt':same_acount_diff_phone_d30_apply_cnt,
+                    'same_acount_diff_ip_apply_cnt':same_acount_diff_ip_apply_cnt,
+                    'same_acount_diff_ip_d0_apply_cnt':same_acount_diff_ip_d0_apply_cnt,
+                    'same_acount_diff_ip_d3_apply_cnt':same_acount_diff_ip_d3_apply_cnt,
+                    'same_acount_diff_ip_d7_apply_cnt':same_acount_diff_ip_d7_apply_cnt,
+                    'same_acount_diff_ip_d14_apply_cnt':same_acount_diff_ip_d14_apply_cnt,
+                    'same_acount_diff_ip_d30_apply_cnt':same_acount_diff_ip_d30_apply_cnt,
+                    'same_acount_diff_device_apply_cnt':same_acount_diff_device_apply_cnt,
+                    'same_acount_diff_device_d0_apply_cnt':same_acount_diff_device_d0_apply_cnt,
+                    'same_acount_diff_device_d3_apply_cnt':same_acount_diff_device_d3_apply_cnt,    
+                    'same_acount_diff_device_d7_apply_cnt':same_acount_diff_device_d7_apply_cnt,
+                    'same_acount_diff_device_d14_apply_cnt':same_acount_diff_device_d14_apply_cnt,
+                    'same_acount_diff_device_d30_apply_cnt':same_acount_diff_device_d30_apply_cnt
+         
+             }
+    df_data = pd.DataFrame([df])
+    df_data.fillna(-1, inplace = True)
+    return df_data 
+
