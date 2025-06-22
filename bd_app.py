@@ -14,7 +14,7 @@ applist['in_time'] = pd.to_datetime(applist['in_time'], errors='coerce')
 applist['up_time'] = pd.to_datetime(applist['up_time'], errors='coerce')
 applist = applist.dropna(subset=['borrow_time', 'in_time','up_time'])
 
-applist_new = pd.merge(applist,sms_df,how = 'left', on= 'app_name')
+applist_new = pd.merge(applist,sms_df,how = 'left', left_on= 'app_package',right_on= 'package_name')
 
 # # 提取分类对应的 app 列表和包名列表
 # def extract_app_lists_by_category(df):
