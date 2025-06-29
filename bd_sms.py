@@ -72,9 +72,15 @@ def sms_variable(order_id):
     sms['balance'] = (sms['content'].str.lower().str.extract(r'(?<=balance)[\s:tk\.]*([\d,]+(?:\.\d{2})?)')[0].str.replace(',', '', regex=False).replace('', pd.NA).astype(float))
 
 # #     sms_in_min/max_d0/3/7/14/30_balance
-    sms_in_min_balance = np.min(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))]['balance'].sum())
-    sms_in_max_balance  = np.max(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))]['balance'].sum())
-    sms_in_d3_max_balance = np.max(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))&(sms.borrow_time.dt.date <= sms.created_time.dt.date + np.timedelta64(3,'D'))]['balance'].sum())
+    sms_in_min_balance = np.min(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))]['balance'])
+    sms_in_max_balance  = np.max(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))]['balance'])
+    sms_in_d3_max_balance = np.max(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))&(sms.borrow_time.dt.date <= sms.created_time.dt.date + np.timedelta64(3,'D'))]['balance'])
+    sms_in_d7_max_balance = np.max(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))&(sms.borrow_time.dt.date <= sms.created_time.dt.date + np.timedelta64(7,'D'))]['balance'])
+    sms_in_d14_max_balance = np.max(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))&(sms.borrow_time.dt.date <= sms.created_time.dt.date + np.timedelta64(14,'D'))]['balance'])
+    sms_in_d30_max_balance = np.max(sms.loc[(sms.type==1)&((sms.phone.str.contains('bKash',case = False, na = False))|(sms.phone.str.contains('nagad',case = False, na = False)))&(sms.borrow_time.dt.date <= sms.created_time.dt.date + np.timedelta64(30,'D'))]['balance'])
+    
+    
+    
 
     
 
