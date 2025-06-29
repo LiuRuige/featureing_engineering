@@ -91,11 +91,23 @@ def sms_variable(order_id):
                     'sms_in_max_d7_debit_amount':sms_in_max_d7_debit_amount,
                      'sms_in_credit_amount':sms_in_credit_amount,'sms_in_d14_credit_amount':sms_in_d14_credit_amount,
                     'sms_in_max_credit_amount':sms_in_max_credit_amount,'sms_in_max_d3_credit_amount':sms_in_max_d3_credit_amount,
-                    'sms_in_bkash_credit_cnt':sms_in_bkash_credit_cnt 
+                    'sms_in_bkash_credit_cnt':sms_in_bkash_credit_cnt, 
+                    'sms_in_d3_bkash_credit_cnt':sms_in_d3_bkash_credit_cnt, 'sms_in_d14_bkash_credit_cnt':sms_in_d14_bkash_credit_cnt,
+                    'sms_in_d30_bkash_credit_cnt':sms_in_d30_bkash_credit_cnt, 'sms_in_bkash_credit_amount':sms_in_bkash_credit_amount,
+                    'sms_in_min_bkash_credit_amount':sms_in_min_bkash_credit_amount,'sms_in_max_bkash_credit_amount':sms_in_max_bkash_credit_amount,
+                    'sms_in_d0_bkash_credit_amount':sms_in_d0_bkash_credit_amount,'sms_in_d0_max_bkash_credit_amount':sms_in_d0_max_bkash_credit_amount,
+                    'sms_in_d0_max_bkash_credit_amount':sms_in_d0_max_bkash_credit_amount,'sms_in_d3_bkash_credit_amount':sms_in_d3_bkash_credit_amount,
+                    'sms_in_d3_max_bkash_credit_amount':sms_in_d3_max_bkash_credit_amount,'sms_in_nagad_credit_cnt':sms_in_nagad_credit_cnt,
+                    'sms_in_d3_nagad_credit_cnt':sms_in_d3_nagad_credit_cnt,'sms_in_d14_nagad_credit_cnt':sms_in_d14_nagad_credit_cnt,'sms_in_d30_nagad_credit_cnt':sms_in_d30_nagad_credit_cnt,
+                    'sms_in_nagad_credit_amount':sms_in_nagad_credit_amount,'sms_in_min_nagad_credit_amount':sms_in_min_nagad_credit_amount,
+                    'sms_in_max_nagad_credit_amount':sms_in_max_nagad_credit_amount,'sms_in_d0_nagad_credit_amount':sms_in_d0_nagad_credit_amount,
+                    'sms_in_d0_max_nagad_credit_amount':sms_in_d0_max_nagad_credit_amount,'sms_in_d3_nagad_credit_amount':sms_in_d3_nagad_credit_amount,
+                    'sms_in_d3_max_nagad_credit_amount':sms_in_d3_max_nagad_credit_amount,'sms_in_min_balance':sms_in_min_balance,'sms_in_max_balance':sms_in_max_balance,
+                    'sms_in_d3_max_balance':sms_in_d3_max_balance,'sms_in_d7_max_balance':sms_in_d7_max_balance,'sms_in_d14_max_balance':sms_in_d14_max_balance,
+                    'sms_in_d30_max_balance':sms_in_d30_max_balance 
 
          
         }
-    
     df_data = pd.DataFrame([df])
     df_data.fillna(-1, inplace = True)
     return df_data 
